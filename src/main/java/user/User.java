@@ -104,6 +104,18 @@ public class User extends Mongo {
         return result;
     }
 
+    public ArrayList<Event> getUpcomingEventsAsObjects() {
+        ArrayList<Object> eventsIds = getUpcomingEvents();
+        ArrayList<Event> result = new ArrayList<>();
+
+        for (int i = 0; i < eventsIds.size(); i++) {
+            Event event = new Event(getDb(), eventsIds.get(i));
+            result.add(event);
+        }
+
+        return result;
+    }
+
     public void setUsername(String username) {
         if (get_id() != null) {
             MongoDatabase db = getDb();

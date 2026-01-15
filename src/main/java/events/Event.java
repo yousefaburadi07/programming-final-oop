@@ -246,6 +246,7 @@ public class Event extends Mongo {
                 System.out.println("You have no upcoming events :(");
                 break;
             }
+            System.out.println("[-2] sort by date & time ");
             System.out.println("[-1] exit");
             for (int i = 0; i < eventsList.size(); i++) {
                 Object eventId = eventsList.get(i);
@@ -274,10 +275,15 @@ public class Event extends Mongo {
 
             System.out.print("which event you would like to cancel: ");
             choice = sc.nextInt();
-            if (choice < -1 || choice >= eventsList.size()) {
+            if (choice < -2 || choice >= eventsList.size()) {
                 System.out.println("Invalid Entry");
                 continue;
             }
+            if (choice == -2) {
+                sortEvents(eventsList, db);
+                continue;
+            }
+
             if (choice > -1) {
                 Object eventId = eventsList.get(choice);
                 Event event = new Event(db, eventId);
@@ -303,7 +309,10 @@ public class Event extends Mongo {
         int choice = -1;
         do {
             System.out.println("Events Created By you: ");
+
+            System.out.println("[-2] Sort By Date & Time");
             System.out.println("[-1] Exit");
+
             for (int i = 0; i < events.size(); i++) {
                 Event event = events.get(i);
                 String title = event.getTitle();
@@ -316,8 +325,7 @@ public class Event extends Mongo {
                 ArrayList<Object> participants = event.getParticipants();
                 System.out.print("    - Participants:");
                 for (Object participantId : participants) {
-                    User participant = new User(db, participantId)
-                        ;
+                    User participant = new User(db, participantId);
                     String participantUsername = participant.getUsername();
                     System.out.print(" " + participantUsername);
                 }
@@ -325,8 +333,14 @@ public class Event extends Mongo {
             }
             System.out.print("event you want to edit: ");
             choice = sc.nextInt();
-            if (choice < -1 || choice >= events.size()) {
+            if (choice < -2 || choice >= events.size()) {
                 System.out.println("Invalid Entry");
+                continue;
+            }
+
+            if (choice == -2) {
+                System.out.println("sort ");
+                sortEvents(events);
                 continue;
             }
             if (choice > -1) {
@@ -407,5 +421,42 @@ public class Event extends Mongo {
 
         mainMenu();
 
+    }
+
+    public static void sortEvents(ArrayList<Event> events) {
+        int n = events.size();
+        for (int i = 0; i < n - 1; i++) {
+            boolean swapped = false;
+            for (int j = 0; j < n - i - 1; j++) {
+                if (events.get(j).getDateTime() > events.get(j + 1).getDateTime()) {
+                    Event temp = events.get(j);
+                    events.set(j, events.get(j + 1));
+                    events.set(j + 1, temp);
+                    swapped = true;
+                }
+            }
+            if (!swapped)
+                break;
+        }
+    }
+
+    public static void sortEvents(ArrayList<Object> events, MongoDatabase db) {
+        int n = events.size();
+        for (int i = 0; i < n - 1; i++) {
+            boolean swapped = false;
+            for (int j = 0; j < n - i - 1; j++) {
+                Event eventLeft = new Event(db, events.get(j));
+                Event eventRight = new Event(db, events.get(j + 1));
+
+                if (eventLeft.getDateTime() > eventRight.getDateTime()) {
+                    Object eventId = events.get(j);
+                    events.set(j, events.get(j + 1));
+                    events.set(j + 1, eventId);
+                    swapped = true;
+                }
+            }
+            if (!swapped)
+                break;
+        }
     }
 }
