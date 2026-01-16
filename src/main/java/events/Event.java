@@ -67,12 +67,8 @@ public class Event extends Mongo {
 
         events.insertOne(event);
 
-        System.out.print("event creation ");
-        System.out.println(event.get("_id"));
         set_id(event.get("_id"));
 
-        System.out.print("event setting ");
-        System.out.println(get_id());
     }
 
     public void setTitle(String title) {
@@ -225,8 +221,6 @@ public class Event extends Mongo {
 
         Event newEvent = new Event(db, eventTitle, eventLocation, dateTimeInSeconds, currentUserId, eventParticipants);
 
-        System.out.print("create func ");
-        System.out.println(newEvent.get_id());
         sendRequest(db, currentUserId, newEvent);
 
         mainMenu();

@@ -48,8 +48,6 @@ public class Request extends Mongo {
 
         Document request = requests.find(new Document("_id", _id)).first();
 
-        System.out.println(request);
-
         setEventId(request.get("event"));
         setUserId(request.get("user"));
         set_id(_id);
@@ -96,8 +94,6 @@ public class Request extends Mongo {
                 User userToInvite = users.get(personIndex);
                 Object eventId = event.get_id();
 
-                System.out.print("event ");
-                System.out.println(eventId);
                 new Request(db, eventId, userToInvite);
                 users.remove(personIndex);
 
@@ -117,7 +113,6 @@ public class Request extends Mongo {
 
         ArrayList<Request> requests = user.getRequestsAsObjects();
 
-        System.out.println(requests);
         if (requests.isEmpty()) {
             System.out.println("You have no requests :(");
             mainMenu();
@@ -126,9 +121,6 @@ public class Request extends Mongo {
         for (int i = 0; i < requests.size(); i++) {
             Request request = requests.get(i);
             Object eventId = request.getEventId();
-
-            System.out.println(request);
-            System.out.println(eventId);
 
             Event event = new Event(db, eventId);
 
@@ -150,9 +142,6 @@ public class Request extends Mongo {
 
                 switch (choice) {
                     case 0:
-                        System.out.print("accept ");
-                        System.out.println(eventId);
-
                         user.addUpcomingEvent(eventId);
                         request.removeRequest();
                         event.addParticipant(userId);
@@ -185,8 +174,6 @@ public class Request extends Mongo {
     }
 
     private void setEventId(Object eventId) {
-        System.out.print("event 3");
-        System.out.println(eventId);
         if (get_id() != null) {
             MongoCollection<Document> collection = getDb().getCollection("requests");
             collection.findOneAndUpdate(new Document("_id", get_id()), new Document("$set", new Document("event", eventId)));

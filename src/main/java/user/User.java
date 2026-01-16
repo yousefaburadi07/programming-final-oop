@@ -95,9 +95,6 @@ public class User extends Mongo {
             Document eventQuery = eventsQuery.get(i);
             Event event = new Event(db, eventQuery.get("_id"));
 
-            System.out.print("get all ");
-            System.out.println(event.get_id());
-
             result.add(event);
         }
 
@@ -185,11 +182,6 @@ public class User extends Mongo {
     }
 
     public void addUpcomingEvent(Object upcomingEvent) {
-        System.out.println("someting ");
-        System.out.println(upcomingEvent);
-
-        System.out.println("someting2j ");
-        System.out.println(get_id());
         if (get_id() != null) {
             System.out.println("this is workinm ");
             MongoCollection<Document> users = getDb().getCollection("users");
