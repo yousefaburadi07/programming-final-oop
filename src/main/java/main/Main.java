@@ -29,7 +29,7 @@ import static events.Event.listUpcomingEvents;;
 
 public class Main {
 
-    public static String dbUri = "mongodb://localhost:27017";
+    public static String dbUri = "mongodb://3.85.108.161:27017/";
     public static Preferences LocalStorage = Preferences.userNodeForPackage(Main.class);
 
 

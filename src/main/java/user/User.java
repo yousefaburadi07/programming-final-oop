@@ -58,8 +58,8 @@ public class User extends Mongo {
 
         Document newUser = new Document("username", getUsername())
                 .append("password", getPassword())
-                .append("requests", getRequests())
-                .append("upcoming-events", getUpcomingEvents());
+                .append("requests", new ArrayList<>())
+                .append("upcoming-events", new ArrayList<>());
 
         users.insertOne(newUser);
 
